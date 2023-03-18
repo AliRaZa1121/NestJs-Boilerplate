@@ -8,8 +8,8 @@ import {
     ApiResponse,
 } from '@nestjs/swagger';
 import { SUCCESS_RESPONSE, BAD_REQUEST, SERVER_ERROR, UNAUTHORIZED_RESPONSE } from 'src/constant/response';
-import { AllowAny } from '../config/auth';
 import { Roles } from '../guard/roles.guard';
+import {AllowAny} from "../guard/auth.guard";
 
 export function ApiResponses(isAuth = true, roles = []) {
     if (isAuth && roles.length > 0) {
