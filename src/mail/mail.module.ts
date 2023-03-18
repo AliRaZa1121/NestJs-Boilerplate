@@ -31,4 +31,4 @@ import { appEnv } from '../helpers/env.helper';
   providers: [MailService],
   exports: [MailService], // 👈 export for DI
 })
-export class MailModule { }
+export class MailModule {}

@@ -56,4 +56,3 @@ export const UNAUTHORIZED_RESPONSE = {
     },
   },
 };
-

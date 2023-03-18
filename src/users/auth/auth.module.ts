@@ -12,23 +12,20 @@ import { MailModule } from '../../mail/mail.module';
     forwardRef(() => UsersModule),
     MailModule,
     PassportModule,
-    PassportModule.register(
-      { defaultStrategy: 'jwt', property: 'user', session: true }
-    ),
-    JwtModule.register(
-      {
-        secret: 'SECRETKEY',
-        signOptions: {
-          expiresIn: '1d'
-        }
-      }
-    ),
+    PassportModule.register({
+      defaultStrategy: 'jwt',
+      property: 'user',
+      session: true,
+    }),
+    JwtModule.register({
+      secret: 'SECRETKEY',
+      signOptions: {
+        expiresIn: '1d',
+      },
+    }),
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService, JwtStrategy
-  ],
-  exports: [PassportModule, JwtModule, AuthService]
-  
+  providers: [AuthService, JwtStrategy],
+  exports: [PassportModule, JwtModule, AuthService],
 })
-export class AuthModule { }
+export class AuthModule {}

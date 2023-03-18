@@ -1,8 +1,8 @@
-import { TypeOrmModule } from "@nestjs/typeorm";
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 export default TypeOrmModule.forRootAsync({
   useFactory: () => ({
-    type: "mysql",
+    type: 'mysql',
     host: process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT) || 3306,
     username: process.env.DB_USERNAME,
