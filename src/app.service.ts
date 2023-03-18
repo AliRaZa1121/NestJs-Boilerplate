@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from "@nestjs/common";
 
 @Injectable()
-export class AppService {
-  getHello(): string {
-    return process.env.WELCOME_MSG;
+export class AppService implements OnModuleInit {
+  constructor() {}
+
+  async onModuleInit() {
+    // console.log(Math.floor(1000 + Math.random() * 9999))
   }
 }

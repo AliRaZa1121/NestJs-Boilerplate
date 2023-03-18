@@ -1,14 +1,8 @@
-import { Controller, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { AppService } from './app.service';
+import { Controller } from "@nestjs/common";
 
 @Controller()
-@ApiTags('Hello API')
 export class AppController {
-  constructor(private readonly appService: AppService) {}
-
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getHello(): any {
+    console.log("Hello!");
   }
 }

@@ -1,4 +1,3 @@
-
 export enum MediaType {
   FILE = "FILE",
   IMAGE = "IMAGE",
@@ -11,38 +10,24 @@ export enum RefreshTokenStatus {
   EXPIRED = "EXPIRED",
 }
 
+export enum RefreshTokenType {
+  OTP = "OTP",
+  UUID = "UUID",
+}
+
 export enum UserStatus {
   ACTIVE = "ACTIVE",
   DE_ACTIVATED = "DE_ACTIVATED",
   PENDING = "PENDING",
 }
 
-export enum InputTypesInDocument {
-  TEXT = "text",
-  SIGNATURE = "signature",
-  SIGNATURE_SIGNED_DATE = "signed-date",
-  CHECKBOX = "checkbox",
-  RADIO = "radiobtn",
-  DATE_PICKER = "datepicker",
-  DROP_DOWN = "dropdown",
-  NUMBER = "number",
-  TIME = "time",
-  PARAGRAPH = "paragraph",
-  NAME = "name",
-  COMPANY = "company",
-  EMAIL = "email",
+export enum BatchStatus {
+  ACTIVE = "ACTIVE",
+  TERMINATED = "TERMINATED",
+  COMPLETED = "COMPLETED",
 }
 
-export enum TemplateRelations {
-  "media" = "media",
-  "user_id" = "user_id",
-  "template_images" = "template_images",
-  "template_details" = "template_details",
-  "template_images.media" = "template_images.media",
-}
-
-export enum ActionsTypesForGuestRoutes {
-  CREATE_ENVELOPE = "CREATE_ENVELOPE",
-  CLONE_ENVELOPE = "CLONE_ENVELOPE",
-  UPDATE_ENVELOPE = "UPDATE_ENVELOPE",
+export enum BatchStudentStatus {
+  ACTIVE = "ACTIVE",
+  DE_ACTIVATED = "DE_ACTIVATED",
 }

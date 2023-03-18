@@ -2,7 +2,7 @@ import {
   Injectable,
   InternalServerErrorException,
   BadRequestException,
-  HttpStatus
+  HttpStatus,
 } from "@nestjs/common";
 import { UpdateMediaDto } from "./dto/update-media.dto";
 import { CreateMediaDto } from "./dto/create-media.dto";
@@ -18,9 +18,7 @@ import { checkIfFileExistsInDir } from "src/helpers/file.helper";
 export class MediaService {
   constructor(
     @InjectRepository(MediaRepository) private mediaRepository: MediaRepository
-  ) {
-  }
-
+  ) {}
   async uploadFile(createMediaDto: CreateMediaDto) {
     try {
       let data = this.mediaRepository.create(createMediaDto);
@@ -32,7 +30,7 @@ export class MediaService {
   }
 
   async checkIfMediaExists(media_id: number): Promise<Media> {
-    const data = await this.mediaRepository.findOne({ where: { id: media_id } });
+    const data = await this.mediaRepository.findOne(media_id);
     if (!data) {
       throw new BadRequestException(
         errorApiWrapper(`Media ${media_id} not found `, HttpStatus.NOT_FOUND)

@@ -4,7 +4,6 @@ export interface ResponseUserInterface {
     lastName: string;
     email: string;
     status: string;
-    apiKey: string;
     createdAt: Date;
     updatedAt: Date;
     role?: Object;

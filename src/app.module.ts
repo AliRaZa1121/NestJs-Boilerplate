@@ -1,20 +1,22 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './users/auth/auth.module';
-import { MailModule } from './mail/mail.module';
-import { ConfigurationsModule } from './config/config.module';
+import { Module } from "@nestjs/common";
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
+import { MediaModule } from "./media/media.module";
+import { JwtStrategy } from "./users/auth/jwt/jwt.strategy";
+import { AuthModule } from "./users/auth/auth.module";
+import { ConfigurationsModule } from "./config/config.module";
+import { RolesModule } from "./roles/roles.module";
+import { UsersModule } from "./users/users.module";
 
 @Module({
   imports: [
     ConfigurationsModule,
-    MailModule,
-    UsersModule,
     AuthModule,
-    MailModule,
+    UsersModule,
+    RolesModule,
+    MediaModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [JwtStrategy, AppService],
 })
 export class AppModule {}

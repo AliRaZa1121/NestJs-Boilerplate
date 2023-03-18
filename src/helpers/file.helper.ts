@@ -1,7 +1,8 @@
 import * as multer from "multer";
 import * as fs from "fs";
+import { CreateMediaDto } from "src/media/dto/create-media.dto";
 import { MediaType } from "src/utilities/enums";
-import { CreateMediaDto } from "../media/dto/create-media.dto";
+
 export const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public/storage");
@@ -13,6 +14,13 @@ export const storage = multer.diskStorage({
     cb(null, name);
   },
 });
+
+export async function checkIfFileExistsInDir(
+  filePath: string
+): Promise<boolean> {
+  const path = `public/${filePath}`;
+  return fs.existsSync(path);
+}
 
 export async function getFileData(
   file: Express.Multer.File
@@ -33,12 +41,4 @@ export async function getFileData(
     fileData.type = MediaType.AUDIO;
   }
   return fileData;
-}
-
-
-export async function checkIfFileExistsInDir(
-  filePath: string
-): Promise<boolean> {
-  const path = `public/${filePath}`;
-  return fs.existsSync(path);
 }

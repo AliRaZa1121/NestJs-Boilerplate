@@ -42,7 +42,6 @@ export const errorApiWrapper = function (
 ) {
   const ErrorApiInterface: ErrorApiInterface = {
     error: error,
-    message: [error],
     statusCode: statusCode,
   };
   return ErrorApiInterface;

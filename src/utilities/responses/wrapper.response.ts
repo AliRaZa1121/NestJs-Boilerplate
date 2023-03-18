@@ -11,6 +11,5 @@ export interface SuccessApiInterface {
 
 export interface ErrorApiInterface {
   error: string;
-  message: string[];
   statusCode: number;
 }

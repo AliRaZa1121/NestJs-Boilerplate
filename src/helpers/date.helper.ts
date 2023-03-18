@@ -1,21 +1,21 @@
-import * as moment from 'moment-timezone';
+import moment from "moment-timezone";
 
 export enum AllowDateFormat {
-  ISODate = 'YYYY-MM-DD',
-  YearMonth = 'YYYY-MM',
-  ShortDate = 'MM/DD/YYYY',
-  LongDate = 'MMM DD YYYY',
-  StringDate = 'YYYY-MM-DDTHH:mm:ss.sssZ',
-  DateTime = 'YYYY-MM-DD HH:mm:ss',
-  TimeWithOutSeconds = 'LT',
-  TimeWithSeconds = 'LTS',
-  DD = 'DD',
-  MM = 'MM',
-  YYYY = 'YYYY',
-  YearWeek = 'GGGG-WW',
-  Time24HourFormat = 'HH:mm:ss',
-  FullMonth = 'MMMM',
-  UnixTimeStamp = 'x',
+  ISODate = "YYYY-MM-DD",
+  YearMonth = "YYYY-MM",
+  ShortDate = "MM/DD/YYYY",
+  LongDate = "MMM DD YYYY",
+  StringDate = "YYYY-MM-DDTHH:mm:ss.sssZ",
+  DateTime = "YYYY-MM-DD HH:mm:ss",
+  TimeWithOutSeconds = "LT",
+  TimeWithSeconds = "LTS",
+  DD = "DD",
+  MM = "MM",
+  YYYY = "YYYY",
+  YearWeek = "GGGG-WW",
+  Time24HourFormat = "HH:mm:ss",
+  FullMonth = "MMMM",
+  UnixTimeStamp = "x",
 }
 
 export function Now() {
@@ -24,10 +24,24 @@ export function Now() {
 
 export function ConvertDurationToSeconds(
   duration,
-  unit: moment.DurationInputArg2 = 'minutes',
+  unit: moment.DurationInputArg2 = "minutes"
 ) {
   return moment.duration(duration, unit).asSeconds();
 }
+
+export const getCurrentTime = function () {
+  const today = new Date();
+  const monthTemp = today.getMonth() + 1;
+  const month = monthTemp < 10 ? "0" + monthTemp : monthTemp;
+
+  const date = today.getFullYear() + "-" + month + "-" + today.getDate();
+  const seconds =
+    today.getSeconds() < 10 ? "0" + today.getSeconds() : today.getSeconds();
+  const minutes =
+    today.getMinutes() < 10 ? "0" + today.getMinutes() : today.getMinutes();
+  const time = today.getHours() + ":" + minutes + ":" + seconds;
+  return date + " " + time;
+};
 
 export function ToTimeStamp(date) {
   return moment(date).valueOf();
@@ -38,7 +52,7 @@ export function IsDateFormatValid(date, format) {
 }
 
 export function GetCurrentWeekDay() {
-  return moment().format('dddd');
+  return moment().format("dddd");
 }
 
 export function ConvertToDate(dateString: string, format: AllowDateFormat) {
@@ -62,55 +76,56 @@ export function ConvertToSpecificFormat(date: Date, format: AllowDateFormat) {
 }
 
 export function SubtractDays(date, days) {
-  return moment(date).subtract(days, 'days').toDate();
+  return moment(date).subtract(days, "days").toDate();
 }
 
-export function AddDays(date, days) {
-  return moment(date).add(days, 'days').toDate();
+export function AddDays(date = null, days: number) {
+  date = moment().toDate();
+  return moment(date).add(days, "days").toDate();
 }
 
 export function AddMonths(date, month) {
-  return moment(date).add(month, 'month').toDate();
+  return moment(date).add(month, "month").toDate();
 }
 
 export function SubtractMonths(date, month) {
-  return moment(date).subtract(month, 'month').toDate();
+  return moment(date).subtract(month, "month").toDate();
 }
 
 export function SubtractHours(date, hour) {
-  return moment(date).subtract(hour, 'hour').toDate();
+  return moment(date).subtract(hour, "hour").toDate();
 }
 
 export function AddHours(date, hour) {
-  return moment(date).add(hour, 'hour').toDate();
+  return moment(date).add(hour, "hour").toDate();
 }
 
 export function DiffBetweenTwoDates(firstDate, secondDate) {
-  return moment(secondDate).diff(moment(firstDate), 'days');
+  return moment(secondDate).diff(moment(firstDate), "days");
 }
 
 export function StartDateOfMonth(date) {
-  return moment(date).startOf('month').toDate();
+  return moment(date).startOf("month").toDate();
 }
 
 export function EndDateOfMonth(date) {
-  return moment(date).endOf('month').toDate();
+  return moment(date).endOf("month").toDate();
 }
 
 export function StartOfDay(date) {
-  return moment(date).startOf('day').toDate();
+  return moment(date).startOf("day").toDate();
 }
 
 export function EndOfDay(date) {
-  return moment(date).endOf('day').toDate();
+  return moment(date).endOf("day").toDate();
 }
 
 export function StartOfYear(date) {
-  return moment(date).startOf('year').toDate();
+  return moment(date).startOf("year").toDate();
 }
 
 export function EndOfYear(date) {
-  return moment(date).endOf('year').toDate();
+  return moment(date).endOf("year").toDate();
 }
 
 export function GetDate(date: Date) {
@@ -128,7 +143,7 @@ export function GetYear(date: Date) {
 export function GetMomentFromString(
   dateString,
   format: AllowDateFormat,
-  tz = 'UTC',
+  tz = "UTC"
 ) {
   return moment.tz(dateString, format, tz);
 }
@@ -142,7 +157,7 @@ export function GetTimezoneDate(date: Date, tz) {
 }
 
 export function GetLastDayOfYear(year) {
-  return moment(year, 'YYYY').endOf('year').toDate();
+  return moment(year, "YYYY").endOf("year").toDate();
 }
 
 export function IsFuture(date: Date) {
@@ -152,32 +167,32 @@ export function IsFuture(date: Date) {
 export function getSeries(
   startDate: moment.Moment,
   endDate: moment.Moment,
-  type: moment.unitOfTime.DurationConstructor,
+  type: moment.unitOfTime.DurationConstructor
 ): string[] {
   if (startDate.isSameOrAfter(endDate)) {
-    throw new Error('Invalid date range supplied');
+    throw new Error("Invalid date range supplied");
   }
 
   const series: string[] = [];
   let format: string = null;
 
   switch (type) {
-    case 'year':
+    case "year":
       format = AllowDateFormat.YYYY;
       break;
-    case 'month':
-      format = AllowDateFormat.YYYY + '-' + AllowDateFormat.MM;
+    case "month":
+      format = AllowDateFormat.YYYY + "-" + AllowDateFormat.MM;
       break;
-    case 'week':
-      format = 'gggg-ww';
+    case "week":
+      format = "gggg-ww";
       break;
     default:
-      type = 'day';
+      type = "day";
       format =
         AllowDateFormat.YYYY +
-        '-' +
+        "-" +
         AllowDateFormat.MM +
-        '-' +
+        "-" +
         AllowDateFormat.DD;
   }
 
@@ -192,37 +207,37 @@ export function getSeries(
 }
 
 export function getYearKeys(year) {
-  const startDate = moment(year, AllowDateFormat.YYYY).startOf('year');
-  const endDate = startDate.clone().endOf('year');
-  const keys: string[] = getSeries(startDate, endDate, 'month');
+  const startDate = moment(year, AllowDateFormat.YYYY).startOf("year");
+  const endDate = startDate.clone().endOf("year");
+  const keys: string[] = getSeries(startDate, endDate, "month");
   return keys;
 }
 
 export function generateLastXMonthKeys(today: moment.Moment, Months: number) {
   const endDate = today;
-  const startDate = today.clone().subtract(Months - 1, 'months');
-  const keys: string[] = getSeries(startDate, endDate, 'month');
+  const startDate = today.clone().subtract(Months - 1, "months");
+  const keys: string[] = getSeries(startDate, endDate, "month");
   return keys;
 }
 
 export function generateWeekIntervalKeysBetweenTwoDates(
   startDate: Date,
-  endDate: Date,
+  endDate: Date
 ) {
-  return getSeries(moment(startDate), moment(endDate), 'week');
+  return getSeries(moment(startDate), moment(endDate), "week");
 }
 
 export function generateDayIntervalKeys(endDate: moment.Moment, interval) {
-  const startDate = endDate.clone().subtract(interval - 1, 'days');
-  const keys: string[] = getSeries(startDate, endDate, 'day');
+  const startDate = endDate.clone().subtract(interval - 1, "days");
+  const keys: string[] = getSeries(startDate, endDate, "day");
   return keys;
 }
 
 export function generateDayIntervalKeysBetweenTwoDates(
   startDate: Date,
-  endDate: Date,
+  endDate: Date
 ) {
-  return getSeries(moment(startDate), moment(endDate), 'days');
+  return getSeries(moment(startDate), moment(endDate), "days");
 }
 
 /**
@@ -230,16 +245,16 @@ export function generateDayIntervalKeysBetweenTwoDates(
  * @description returns range (start & end datetime) of previous Quarter of the hour or the datetime provided
  */
 export function getPreviousQuarterHourRange(dateTime = moment()) {
-  if (typeof dateTime === 'string') {
+  if (typeof dateTime === "string") {
     dateTime = moment(dateTime, AllowDateFormat.DateTime);
   }
 
-  const startTime = dateTime.clone().subtract(15, 'minutes');
+  const startTime = dateTime.clone().subtract(15, "minutes");
   startTime.minutes(Math.floor(startTime.minutes() / 15) * 15);
   startTime.seconds(0);
 
   const endTime = startTime.clone();
-  endTime.add(15, 'minutes').subtract(1, 'second');
+  endTime.add(15, "minutes").subtract(1, "second");
 
   return {
     start: startTime,
@@ -255,7 +270,7 @@ export function getPreviousQuarterHourRange(dateTime = moment()) {
 export function getAvailableTimezones() {
   return moment.tz.names().filter((tz) => {
     const tzl = tz.toLowerCase();
-    return tzl.indexOf('etc/') === -1 && tzl.indexOf('/') !== -1;
+    return tzl.indexOf("etc/") === -1 && tzl.indexOf("/") !== -1;
   });
 }
 
@@ -269,10 +284,11 @@ export function getDayChangedTimezones(dateTime: moment.Moment): string[] {
 
   return getAvailableTimezones().filter((tz) => {
     const dt: moment.Moment = dateTime.clone();
-    dt.tz(tz).set('seconds', 0);
-    return dt.format('HH:mm:ss') == '00:00:00';
+    dt.tz(tz).set("seconds", 0);
+    return dt.format("HH:mm:ss") == "00:00:00";
   });
 }
+
 /**
  * @function
  * @description Get timezones in which week is changed on the given utc date time
@@ -283,15 +299,16 @@ export function getWeekChangedTimezones(dateTime: moment.Moment): string[] {
 
   return getDayChangedTimezones(dateTime).filter((tz) => {
     const dt: moment.Moment = dateTime.clone();
-    dt.tz(tz).set('seconds', 0);
+    dt.tz(tz).set("seconds", 0);
     const dt2 = dt.clone();
-    dt2.subtract('second', 1);
+    dt2.subtract("second", 1);
     return (
       dt.format(AllowDateFormat.YearWeek) !=
       dt2.format(AllowDateFormat.YearWeek)
     );
   });
 }
+
 /**
  * @function
  * @description Get timezones in which month is changed on the given utc date time
@@ -302,9 +319,9 @@ export function getMonthChangedTimezones(dateTime: moment.Moment): string[] {
 
   return getDayChangedTimezones(dateTime).filter((tz) => {
     const dt: moment.Moment = dateTime.clone();
-    dt.tz(tz).set('seconds', 0);
+    dt.tz(tz).set("seconds", 0);
     const dt2 = dt.clone();
-    dt2.subtract('seconds', 1);
+    dt2.subtract("seconds", 1);
     return (
       dt.format(AllowDateFormat.YearMonth) !=
       dt2.format(AllowDateFormat.YearMonth)

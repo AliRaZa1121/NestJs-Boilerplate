@@ -1,49 +1,74 @@
+import { Controller, HttpStatus, Post, Body } from "@nestjs/common";
+import { ApiTags, ApiResponse } from "@nestjs/swagger";
+import { LoginResponse } from "src/swagger-responses/auth-swagger";
+import { AuthService } from "./auth.service";
 import {
-  Controller,
-  Post,
-  Body,
-  Param,
-  Req,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
-import { AuthService } from './auth.service';
+  AuthLoginDto,
+  AuthRegisterDto,
+  ChangePasswordApiDto,
+  ForgetPasswordDto,
+  ResetPasswordApiDto,
+  VerifyOtpDto,
+} from "../dto/authentications.dto";
+import { ApiAuthPermission } from "src/decorators/api-permissions.decorator";
 import {
-  LoginDto,
-  RegisterDto,
-  ForgetPasswordRequest,
-  ResetPasswordRequest,
-} from '../dto/auth.dto';
-import { ApiBearerAuth, ApiTags, ApiResponse } from '@nestjs/swagger';
-import { ApiResponses } from 'src/decorators/middlware';
-import { Response } from 'src/constant/response';
+  SuccessApiInterface,
+  ErrorApiInterface,
+} from "src/utilities/responses/wrapper.response";
+import { AuthUser } from "../../decorators/auth-user.decorator";
 
-@Controller()
-@ApiTags('Auth APIs')
+@ApiTags("Auth")
+@Controller("/")
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
-  @Post('register')
-  @ApiResponses(false)
-  public async register(@Body() data: RegisterDto): Promise<Response> {
-    return await this.authService.register(data);
+  @ApiResponse({
+    type: LoginResponse,
+    status: HttpStatus.OK,
+  })
+  @Post("login")
+  signIn(
+    @Body() authLoginDto: AuthLoginDto
+  ): Promise<SuccessApiInterface | ErrorApiInterface> {
+    return this.authService.signIn(authLoginDto);
   }
 
-  @Post('login')
-  @ApiResponses(false)
-  public async login(@Body() loginUserDto: LoginDto): Promise<any> {
-    return await this.authService.login(loginUserDto);
+  @ApiResponse({
+    type: LoginResponse,
+    status: HttpStatus.OK,
+  })
+  @Post("register")
+  signUp(@Body() authRegisterDto: AuthRegisterDto) {
+    return this.authService.signUp(authRegisterDto);
   }
 
-  @Post('/forget-password')
-  @ApiResponses(false)
-  async ForgetPassword(@Body() data: ForgetPasswordRequest) {
-    return await this.authService.ForgetPassword(data);
+  @Post("/forget-password")
+  async forgetPassword(
+    @Body() data: ForgetPasswordDto
+  ): Promise<SuccessApiInterface | ErrorApiInterface> {
+    return await this.authService.forgetPassword(data);
   }
 
-  @Post('/reset-password')
-  @ApiResponses(false)
-  async ResetPassword(@Body() data: ResetPasswordRequest) {
-    return await this.authService.ResetPassword(data);
+  @Post("verify-otp")
+  public async verifyOtp(
+    @Body() payload: VerifyOtpDto
+  ): Promise<SuccessApiInterface | ErrorApiInterface> {
+    return await this.authService.verifyOtp(payload);
+  }
+
+  @Post("/reset-password")
+  async resetPassword(
+    @Body() data: ResetPasswordApiDto
+  ): Promise<SuccessApiInterface | ErrorApiInterface> {
+    return await this.authService.resetPassword(data);
+  }
+
+  @Post("/change-password")
+  @ApiAuthPermission(true)
+  async changePassword(
+    @Body() data: ChangePasswordApiDto,
+    @AuthUser() user
+  ): Promise<SuccessApiInterface | ErrorApiInterface> {
+    return await this.authService.changePassword(data, user);
   }
 }
