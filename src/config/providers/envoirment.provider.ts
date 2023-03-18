@@ -1,7 +1,7 @@
 import { ConfigModule } from "@nestjs/config";
 export default ConfigModule.forRoot({
-  isGlobal: true, // no need to import into other modules
-  cache: true,
-  load: [],
+  cache: true, // no need to import into other modules
   envFilePath: `${process.cwd()}/${process.env.NODE_ENV}.env`,
+  // load: [MAIL_ENV],
+  isGlobal: true,
 });

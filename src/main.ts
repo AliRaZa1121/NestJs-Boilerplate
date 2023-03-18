@@ -1,44 +1,54 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
-import { useContainer } from 'class-validator';
-
+import { ValidationPipe } from "@nestjs/common";
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import * as bodyParser from "body-parser";
+import {
+  SwaggerModule,
+  DocumentBuilder,
+  SwaggerDocumentOptions,
+} from "@nestjs/swagger";
+import { NestExpressApplication } from "@nestjs/platform-express";
+import { join } from "path";
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(
-    new ValidationPipe({
-      /**
-       * Strip away all none-object existing properties
-       */
-      // whitelist: true,
-      /***
-       * Transform input objects to their corresponding DTO objects
-       */
-      // transform: true,
-    }),
-  );
-  useContainer(app.select(AppModule), { fallbackOnErrors: true });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+
+  app.enableCors({
+    allowedHeaders: "*",
+    origin: "*",
+  });
+  app.useStaticAssets(join(__dirname, "..", "public"));
 
   const config = new DocumentBuilder()
-    .setTitle('App Backend')
-    .setDescription('App Backend API description')
-    .setVersion('1.0')
+    .setTitle("LMS")
+    .setDescription("LMS Squad Dev")
+    .setVersion("1.0")
+    .addTag("Auth")
     .addBearerAuth(
-      {
-        description: `Please enter token in following format: Bearer <JWT>`,
-        name: 'Authorization',
-        bearerFormat: 'Bearer',
-        scheme: 'Bearer',
-        type: 'http',
-        in: 'Header',
-      },
-      'access-token',
+      { type: "http", scheme: "bearer", bearerFormat: "JWT" },
+      "JWT"
     )
     .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
-  await app.listen(parseInt(process.env.PORT, 10) || 3000);
-  console.log(`App is running on PORT ${parseInt(process.env.PORT, 10) || 3000}`);
+
+  const options: SwaggerDocumentOptions = {
+    deepScanRoutes: true,
+  };
+  const document = SwaggerModule.createDocument(app, config, options);
+  SwaggerModule.setup("/swagger", app, document);
+  app.use(bodyParser.json({ limit: "50mb" }));
+  app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+  app.use(
+    (
+      req: { protocol: any; hostname: any; appUrl: string },
+      res: any,
+      next: () => any
+    ) => {
+      const protocol = req.protocol;
+      const host = req.hostname;
+      req.appUrl = `${protocol}://${host}`;
+      return next();
+    }
+  );
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
