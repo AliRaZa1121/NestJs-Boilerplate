@@ -12,7 +12,6 @@ import { join } from "path";
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
-
   app.enableCors({
     allowedHeaders: "*",
     origin: "*",
@@ -20,8 +19,8 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, "..", "public"));
 
   const config = new DocumentBuilder()
-    .setTitle("LMS")
-    .setDescription("LMS Squad Dev")
+    .setTitle("Rest API")
+    .setDescription("Nest Js Rest API Boilerplate")
     .setVersion("1.0")
     .addTag("Auth")
     .addBearerAuth(

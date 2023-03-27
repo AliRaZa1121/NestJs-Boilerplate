@@ -19,9 +19,11 @@ import { CreateRolesDto, UpdateRolesDto } from "./dto/roles.dto";
 import { ListingParams } from "src/utilities/global.dto";
 import { ResponseRoles } from "src/swagger-responses/roles-swagger";
 import { ApiAuthPermission } from "../decorators/api-permissions.decorator";
+import { ApiController } from "../decorators/api-controller.decorator";
 
-@ApiTags("Roles")
-@Controller("roles")
+// @ApiTags("Roles")
+// @Controller("roles")
+@ApiController({version: "1", tag: "Roles Management", path: "/roles"})
 @ApiAuthPermission()
 export class RolesController {
   constructor(private rolesService: RolesService) {}
